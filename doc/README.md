@@ -1,0 +1,1 @@
+# This folder is for documenting all the progress, errors, tool usage, and reports

@@ -1,0 +1,13 @@
+# Ignore log files
+*.log
+
+# Ignore build directory
+build/
+
+# Ignore others
+*.so
+*.o
+*.a
+*.pyc
+*.swp
+*.DS_Store
