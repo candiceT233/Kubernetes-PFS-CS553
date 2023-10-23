@@ -1,0 +1,172 @@
+Dump of my notes: 
+
+Questions to ask:  
+
+On ubuntu server we will installs k8s and in k8s will we deploy beegfs-driver ? 
+
+
+Beegfs Installation - 
+
+Step 1: clone beegfs-csi-driver 
+Step 2: now create a new overlay to deploy the driver.
+Commands: cd beegfs-csi-driver
+Cp -r deploy/k8ss/overlays/default deploy/k8s/overlays/my-overlay
+Kubectl apply -k deploy/k8s/overlays/my-overlay/
+
+Step 3: To verify the components are installed see the pods in beegfs namespace
+Kubectl get pods -n beegfs-csi
+
+
+Beegfs CSI Driver Dyanamic provisioning workflow - 
+
+Prereq: Beegfs Csi driver must be deployed on k8s cluster
+A beeGFS must be accessible from all the k8s nodes.
+
+Navigate to the dyn folder in beegfs-csi-driver/examples/k8s/dyn
+
+Modify the dyn-sc.yml 
+
+Kubectl apply -f dyn-sc.yml
+
+Kubectl get sc demo-sc
+
+Edit the pvc file and then kubectl apply -f dyn-pvc.yml 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Need to go through - Prepare the Kubernetes nodes.
+
+Install the BeeGFS client packages on each node.
+Configure the BeeGFS helper service to disable authentication or use a shared connection authentication file.
+Start and enable the BeeGFS helper service.
+Commands:
+
+Install the BeeGFS client packages on each node.
+yum install beegfs-client-dkms beegfs-helperd beegfs-utils
+
+Configure the BeeGFS helper service to disable authentication or use a shared connection authentication file.
+Edit the /etc/beegfs/helper.conf file and set the AUTH_METHOD option to none or file.
+If you are using file authentication, set the AUTH_FILE option to the path of the shared connection authentication file.
+Start and enable the BeeGFS helper service.
+systemctl start beegfs-helperd
+systemctl enable beegfs-helperd
+
+Install the BeeGFS CSI driver operator.
+
+You can install the BeeGFS CSI driver operator from OperatorHub.io or from the OpenShift Console.
+
+Command:
+
+# Install the BeeGFS CSI driver operator from OperatorHub.io.
+operator-sdk add apibeegsfsio/v1alpha1
+operator-sdk add role app-cluster-role
+operator-sdk generate kustomize
+
+# Apply the BeeGFS CSI driver operator kustomization.
+kubectl apply -k deploy/
+Install the BeeGFS CSI driver.
+
+Command:
+
+# Change to the BeeGFS CSI driver directory.
+cd beegfs-csi-driver
+
+# Apply the BeeGFS CSI driver kustomization.
+kubectl apply -k deploy/k8s/overlays/my-overlay .
+Verify the BeeGFS CSI driver installation.
+
+Command:
+
+# Run the following command to verify that the BeeGFS CSI driver is installed and running:
+kubectl get csi
+You should see the BeeGFS CSI driver in the list of CSIs.
+
+Create a BeeGFS file system.
+
+Create a BeeGFS file system using the BeeGFS management tools.
+
+For example, on a BeeGFS management node, you can use the following command to create a BeeGFS file system called "my-fs":
+
+mgsctl createfs my-fs -s 1000 -S 10000
+Create a BeeGFS persistent volume claim.
+
+Create a persistent volume claim (PVC) to request a BeeGFS persistent volume.
+
+Specify the BeeGFS file system that you created in step 1 in the storageClassName field of the PVC.
+
+For example, the following PVC will request a BeeGFS persistent volume from the BeeGFS file system called "my-fs":
+
+YAML
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: my-fs
+Use code with caution. Learn more
+Bind the BeeGFS persistent volume to a Pod.
+
+You can bind the BeeGFS persistent volume to a Pod using the persistentVolumeClaim field in the Pod spec.
+
+For example, the following Pod will mount the BeeGFS persistent volume that was created in step 2 to the /mnt/my-fs directory:
+
+YAML
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: busybox
+      volumeMounts:
+        - name: my-volume
+          mountPath: /mnt/my-fs
+      command: ["sh", "-c", "sleep 3600"]
+  volumes:
+    - name: my-volume
+      persistentVolumeClaim:
+        claimName: my-pvc
+Use code with caution. Learn more
+Once the Pod is created, it will have access to the BeeGFS file system.
+
+
+Dr sun 
+Dr anthony 
+
+Make sure to create own branches
+Write the readme 
+40% efforts are part of the grade 
+
+IOR benchmarks 
+
+
+Program is supposed has little bit of computation 
+
+Run without k8s and with beegfs
+
+Run with k8s and beegfs 
+
+
+K8s with beegfs and without beegfs compare the metrics in performance analysis tool 
+
+How to dynalically adjust using ior. Ior as application. Use parameters from 
+During ior use performance analysis tool - PAT
+
+
+
