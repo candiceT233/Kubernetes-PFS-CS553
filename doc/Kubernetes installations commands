@@ -1,1 +1,14 @@
-Notes: Installation
+Kubernetes installations steps:
+----Master end and slave end flow:
+        * Update your Repository
+        * Turn off swap space
+        * Update hostname,hosts & set static IP
+        * Install OpenSSH server & Docker
+        * Install Kubeadm, kubelet & Kubectl
+----Only at Master:
+        * Inititate kubernetes cluster
+        * Install the Pod Network
+        * Setup the kubernetes Dashboard
+----Only at Slave:
+        * Join the cluster
+
