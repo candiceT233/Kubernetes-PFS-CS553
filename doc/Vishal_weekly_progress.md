@@ -1,3 +1,17 @@
+Questions to ask: 
+
+How are volumes provisioned in the cluster (static provisioning, dynamic provisioning)?
+
+specific IOR parameters or configurations that need to be set for the workload?
+
+
+
+
+
+
+
+
+
 Done: 
 
 K8s setup has been done
