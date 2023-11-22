@@ -8,7 +8,7 @@ Coming to Beegfs we are working on the installation for the Chameleon Ubuntu ins
 
 In pipeline: 
 
-We are yet to work on Beegfs for the chameleon and my question is we will be using the same volume NFS servers.
+We are yet to work on Beegfs for the chameleon and my question is we will be using the same volume NFS servers?
 
 
 
