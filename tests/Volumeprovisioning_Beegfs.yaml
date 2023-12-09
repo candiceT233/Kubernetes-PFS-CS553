@@ -1,0 +1,87 @@
+#consider this as a skeleton
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: beegfs-csi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beegfs-csi-driver
+  namespace: beegfs-csi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beegfs-csi-driver
+  template:
+    metadata:
+      labels:
+        app: beegfs-csi-driver
+    spec:
+      containers:
+      - name: beegfs-csi-driver
+        image: beegfs/csi-driver:latest
+        imagePullPolicy: Always
+        args:
+        - --nodeid=$(NODE_ID)
+        - --endpoint=$(CSI_ENDPOINT)
+        env:
+        - name: NODE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CSI_ENDPOINT
+          value: unix:///var/lib/kubelet/plugins/beegfs.csi.io/csi.sock
+        volumeMounts:
+        - mountPath: /var/lib/kubelet/plugins/beegfs.csi.io
+          name: socket-dir
+      volumes:
+      - name: socket-dir
+        emptyDir: {}
+
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: beegfs-sc
+provisioner: beegfs.csi.io
+parameters:
+  storageClass: beegfs
+  # Add additional BeeGFS CSI driver parameters here.
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: beegfs-sc
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: my-image
+    imagePullPolicy: Always
+    command: 
+    volumeMounts:
+    - mountPath: /data
+      name: my-pv
+  volumes:
+  - name: my-pv
+    persistentVolumeClaim:
+      claimName: my-pvc
+
