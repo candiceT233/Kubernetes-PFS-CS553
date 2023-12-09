@@ -1,0 +1,2 @@
+Block Size (KB)   Write Bandwidth (MiB/sec)   Read Bandwidth (MiB/sec)   Write IOPS   Read IOPS
+32                1345.2 +/- 80               1423.8 +/- 70              336300 +/- 3500         356250 +/- 3000
