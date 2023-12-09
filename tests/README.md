@@ -1,2 +1,2 @@
-# This folder is for putting all tests scripts and results
-Scripts should automate testing on all test configurations.
+# This folder is for putting all test scripts and results
+files whose name starts with IorResults are having IOR results w.r.t to BEEGFS
