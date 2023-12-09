@@ -1,3 +1,5 @@
+**Notes to Meng**: Sayali and I worked collaboratively to develop all the files in this branch.
+
 **Overview:**
 
 This repository contains scripts and tools for benchmarking BeeGFS performance within a Kubernetes environment. The provided scripts facilitate BeeGFS installation, interaction, and benchmarking, along with Kubernetes setup and storage provisioning checks.
